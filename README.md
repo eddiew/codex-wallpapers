@@ -19,7 +19,7 @@ only read, never modified, and both can run side by side.
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/OWNER/codex-wallpapers/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/eddiew/codex-wallpapers/main/install.sh | bash
 ```
 
 Requirements: macOS and the ChatGPT desktop app in `/Applications`. Node.js 20+
@@ -29,13 +29,23 @@ build (checksum verified) into `~/.codex-wallpapers` just to run the patcher.
 Or from a clone:
 
 ```sh
-git clone https://github.com/OWNER/codex-wallpapers.git
+git clone https://github.com/eddiew/codex-wallpapers.git
 cd codex-wallpapers
 ./install.sh
 ```
 
 When ChatGPT updates, run the installer again to rebuild the copy from the new
 version. Your wallpaper settings are kept.
+
+> [!TIP]
+> To inspect the installer first, open [`install.sh`](install.sh) or download
+> it without piping it into a shell.
+
+### Install via prompt
+
+Paste this into Codex, Claude Code, or another coding agent:
+
+> Install Codex Wallpapers from `https://github.com/eddiew/codex-wallpapers` on this Mac using the repository's one-command installer, without modifying the official ChatGPT app. Launch the resulting Codex Wallpapers app, and ask me only if a prerequisite needs my input.
 
 ## Use
 
@@ -52,21 +62,29 @@ Open **Codex Wallpapers** and pick **Wallpaper → Choose Wallpaper…** (⌃⌘
 
 On first launch it picks a wallpaper from this month's top list.
 
-## With other Codex patches
+## With Codex Subscription Router
 
-Codex Wallpapers can be layered onto another patched copy of the app, such as
-[Codex Subscription Router](https://github.com/b-nnett/codex-subscription-router):
+Yes, you can use both. Codex Wallpapers layers onto another patched copy of the
+app, such as [Codex Subscription Router](https://github.com/b-nnett/codex-subscription-router):
 
-```sh
-curl -fsSL https://raw.githubusercontent.com/OWNER/codex-wallpapers/main/install.sh \
-  | bash -s -- --onto "$HOME/Applications/Codex Subscription Router.app"
-```
+1. Install Codex Subscription Router as usual.
+2. Add wallpapers to it:
 
-`--onto` adds only the wallpaper layer, in place. The target keeps its name,
-bundle identifier, profile, and signing identity (it's re-signed with the same
-certificate from your keychain, so macOS permissions granted to it carry
-over). It refuses to modify the official app. If the other tool rebuilds its
-app, run the command again.
+   ```sh
+   curl -fsSL https://raw.githubusercontent.com/eddiew/codex-wallpapers/main/install.sh \
+     | bash -s -- --onto "$HOME/Applications/Codex Subscription Router.app"
+   ```
+
+`--onto` adds only the wallpaper layer, in place. It touches none of the code the
+router patches, so the two don't conflict. The router app keeps its name,
+bundle identifier, profile, and accounts. It's re-signed with the same
+certificate it already has (which must be in your keychain, as it is when you
+built the router yourself), so macOS permissions granted to it and its
+Computer Use helper carry over. `--onto` refuses to modify the official app.
+
+Re-installing or updating the router rebuilds its app from the official one and
+removes the wallpaper layer. Run step 2 again afterwards; your wallpaper
+settings are kept.
 
 ## How it works
 

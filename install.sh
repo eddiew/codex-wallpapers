@@ -1,7 +1,7 @@
 #!/bin/bash
 # Codex Wallpapers installer.
 #
-#   curl -fsSL https://raw.githubusercontent.com/OWNER/codex-wallpapers/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/eddiew/codex-wallpapers/main/install.sh | bash
 #
 # Builds "Codex Wallpapers.app" in ~/Applications from your installed ChatGPT
 # desktop app. Your ChatGPT app is never modified. Arguments are passed to the
@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-readonly REPOSITORY="${CODEX_WALLPAPERS_REPOSITORY:-OWNER/codex-wallpapers}"
+readonly REPOSITORY="${CODEX_WALLPAPERS_REPOSITORY:-eddiew/codex-wallpapers}"
 readonly BRANCH="${CODEX_WALLPAPERS_BRANCH:-main}"
 readonly HOME_DIR="${HOME}/.codex-wallpapers"
 readonly NODE_VERSION="24.21.0"
