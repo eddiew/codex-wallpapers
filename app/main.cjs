@@ -233,9 +233,12 @@ module.exports = function codexWallpapers({ appName, version, isolateProfile = t
 
   // Menu: a Wallpaper menu beside the app's own, whenever it sets its menu.
   const sendToFocused = (channel) => {
-    const focused = electron.BrowserWindow.getFocusedWindow() ?? electron.BrowserWindow.getAllWindows()[0]
-    const contents = focused?.webContents
-    if (contents && isAppPage(contents.getURL())) contents.send(channel)
+    // The focused window, else the main one: the app also keeps hidden
+    // overlay windows, which load index.html with an initialRoute.
+    const isMain = (window) => window.webContents.getURL() === 'app://-/index.html'
+    const focused = electron.BrowserWindow.getFocusedWindow()
+    const target = focused && isMain(focused) ? focused : electron.BrowserWindow.getAllWindows().find(isMain)
+    target?.webContents.send(channel)
   }
   const wallpaperMenu = () =>
     new electron.MenuItem({

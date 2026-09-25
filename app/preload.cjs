@@ -46,6 +46,10 @@ if (isMainWindow) {
   background-color: transparent !important;
   backdrop-filter: none;
 }
+/* A soft halo in the surface color keeps the greeting legible over bright photos. */
+:root[data-cw-on] [class~="group/home-composer-layout"] > :first-child {
+  text-shadow: 0 0 28px var(--color-surface), 0 1px 3px color-mix(in oklab, var(--color-surface) 80%, transparent);
+}
 :root[data-cw-on]:has([data-composer-placement="home"]) [data-composer-rail-item] {
   background-color: color-mix(in oklab, var(--color-surface) 70%, transparent);
   backdrop-filter: blur(20px);
@@ -103,7 +107,12 @@ if (isMainWindow) {
 #cw-panel .cw-body > * { flex-shrink: 0; }
 #cw-panel .cw-value { opacity: 0.55; font-variant-numeric: tabular-nums; }
 #cw-panel .cw-check { display: flex; align-items: center; gap: 6px; }
-#cw-panel .cw-check input { margin: 0; accent-color: #34c759; }
+/* The app's CSS strips native checkbox styling, so draw it here. */
+#cw-panel .cw-check input { -webkit-appearance: none; appearance: none; flex: none; margin: 0; width: 16px; height: 16px;
+  border-radius: 4px; border: 1px solid color-mix(in oklab, currentColor 35%, transparent);
+  background: color-mix(in oklab, currentColor 6%, transparent) center / 12px no-repeat; cursor: pointer; }
+#cw-panel .cw-check input:checked { background-color: #34c759; border-color: #34c759;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3 4.7-5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
 #cw-panel input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; margin: 8px 0;
   border-radius: 2px; background: color-mix(in oklab, currentColor 22%, transparent); }
 #cw-panel input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px;

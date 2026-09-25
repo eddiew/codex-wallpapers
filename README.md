@@ -5,7 +5,24 @@ photo behind the whole window, frosted glass behind conversations, and a
 picker that searches [Wallhaven](https://wallhaven.cc) and can shuffle on a
 schedule.
 
-![Codex Wallpapers](screenshots/home.png)
+![Codex Wallpapers](screenshots/demo.gif)
+
+<table>
+  <tr>
+    <td><img src="screenshots/home-sharp-mist.jpg" alt="Home screen over misty mountains"></td>
+    <td><img src="screenshots/home-sharp-mountains.jpg" alt="Home screen over a mountain sunset"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/conversation.jpg" alt="Conversation over frosted glass"></td>
+    <td><img src="screenshots/picker.jpg" alt="Wallpaper picker"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/home-sharp-dusk.jpg" alt="Home screen at dusk"></td>
+    <td><img src="screenshots/home-blur.jpg" alt="Home screen with blur"></td>
+  </tr>
+</table>
+
+[Full-quality video](screenshots/demo.mp4)
 
 Codex Wallpapers builds a separate, locally patched copy of the app,
 **Codex Wallpapers.app**, in `~/Applications`. Your installed ChatGPT app is
