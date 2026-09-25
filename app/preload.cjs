@@ -67,6 +67,11 @@ if (isMainWindow) {
   box-shadow: 0 24px 64px rgb(0 0 0 / 0.35); font: 13px/1.4 system-ui, -apple-system, sans-serif;
   animation: cw-in 160ms ease; }
 #cw-panel[hidden] { display: none; }
+/* Native popups (the select lists) follow the app's theme, and their options
+   use the system's matching text and background instead of the panel's. */
+:root[data-theme="dark"] #cw-panel { color-scheme: dark; }
+:root[data-theme="light"] #cw-panel { color-scheme: light; }
+#cw-panel select option { color: CanvasText; background-color: Canvas; }
 @keyframes cw-in { from { opacity: 0; transform: translateY(-6px) scale(0.98); } }
 #cw-panel * { box-sizing: border-box; }
 #cw-panel header { display: flex; align-items: center; gap: 10px; padding: 14px 14px 10px; }
