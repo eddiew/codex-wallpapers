@@ -1,0 +1,14 @@
+{
+  "name": "codex-wallpapers",
+  "version": "0.1.0",
+  "description": "Wallpapers for the Codex desktop app, as an independent patched copy.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "patch": "node bin/patch.mjs"
+  }
+}
