@@ -1,8 +1,8 @@
 # Codex Wallpapers
 
-Wallpapers for the ChatGPT desktop app (the Codex app): a photo behind the
-whole window, crisp on the home screen and frosted behind conversations, with
-a picker that searches [Wallhaven](https://wallhaven.cc) and can shuffle on a
+Wallpapers for the ChatGPT desktop app (the Codex app): a softly blurred
+photo behind the whole window, frosted glass behind conversations, and a
+picker that searches [Wallhaven](https://wallhaven.cc) and can shuffle on a
 schedule.
 
 ![Codex Wallpapers](screenshots/home.png)
@@ -45,7 +45,9 @@ Open **Codex Wallpapers** and pick **Wallpaper → Choose Wallpaper…** (⌃⌘
   random, or latest. Results are always safe-for-work.
 - **Next Wallpaper** (⌃⌘N) shuffles; **Shuffle** changes it every 15 minutes
   to every day.
-- **Dim photo** and **Glass tint** tune legibility.
+- **Blur** (off to 48px), **Dim photo**, and **Glass tint** tune legibility.
+  Tick **Home screen: Sharp** to keep the photo unblurred on the home and new
+  chat screen while conversations stay blurred.
 - Use any `https://` image URL, or **Choose file…** for your own image.
 
 On first launch it picks a wallpaper from this month's top list.

@@ -17,7 +17,9 @@ const DEFAULTS = {
   filters: { query: '', categories: '100', sorting: 'toplist', topRange: '1M' },
   shuffleMinutes: 0,
   shuffledAt: 0,
-  dim: 0.25,
+  blur: 16,
+  sharpHome: false,
+  dim: 0.3,
   frost: 0.72,
   recent: [],
 }
@@ -214,6 +216,8 @@ module.exports = function codexWallpapers({ appName, version, isolateProfile = t
     if (typeof patch.enabled === 'boolean') clean.enabled = patch.enabled
     if ([0, 15, 60, 240, 1440].includes(patch.shuffleMinutes)) clean.shuffleMinutes = patch.shuffleMinutes
     if (typeof patch.dim === 'number') clean.dim = Math.min(Math.max(patch.dim, 0), 0.9)
+    if (typeof patch.sharpHome === 'boolean') clean.sharpHome = patch.sharpHome
+    if (typeof patch.blur === 'number') clean.blur = Math.min(Math.max(Math.round(patch.blur), 0), 48)
     if (typeof patch.frost === 'number') clean.frost = Math.min(Math.max(patch.frost, 0.2), 0.95)
     if (patch.filters && typeof patch.filters === 'object') {
       const { query, categories, sorting, topRange } = patch.filters

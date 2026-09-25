@@ -19,8 +19,10 @@ if (isMainWindow) {
 #cw-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
   background: var(--color-surface); opacity: 0; transition: opacity 300ms ease; }
 :root[data-cw-on] #cw-backdrop { opacity: 1; }
+/* Blurred so text stays legible over any photo; scaled so the blur's soft edges fall outside the window. */
 #cw-backdrop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  object-position: 50% 40%; opacity: 0; transition: opacity 700ms ease; }
+  object-position: 50% 40%; opacity: 0; transition: opacity 700ms ease, filter 200ms ease;
+  filter: blur(calc(var(--cw-blur, 16) * 1px)); transform: scale(calc(1 + var(--cw-blur, 16) * 0.004)); }
 #cw-backdrop img[data-shown] { opacity: 1; }
 #cw-backdrop .cw-veil { position: absolute; inset: 0;
   background: color-mix(in oklab, var(--color-surface) calc(var(--cw-dim, 0.25) * 100%), transparent); }
@@ -30,12 +32,16 @@ if (isMainWindow) {
   background-color: color-mix(in oklab, var(--color-surface) calc(var(--cw-frost, 0.72) * 100%), transparent) !important;
   backdrop-filter: blur(40px) saturate(1.2);
 }
+/* Pages inside the panel (Settings, for one) that paint their own solid surface. */
+:root[data-cw-on] main[data-app-shell-main-surface] [class~="electron:bg-surface"] {
+  background-color: transparent !important;
+}
 /* The sidebar frosts it too, a little lighter. */
 :root[data-cw-on] aside.app-shell-left-panel {
-  background-color: color-mix(in oklab, var(--color-surface) calc(var(--cw-frost, 0.72) * 80%), transparent) !important;
+  background-color: color-mix(in oklab, var(--color-surface) calc(var(--cw-frost, 0.72) * 90%), transparent) !important;
   backdrop-filter: blur(30px) saturate(1.3);
 }
-/* Home: the photo sits crisp behind the greeting and composer. */
+/* Home: the photo shows through behind the greeting and composer. */
 :root[data-cw-on]:has([data-composer-placement="home"]) main[data-app-shell-main-surface] {
   background-color: transparent !important;
   backdrop-filter: none;
@@ -44,7 +50,11 @@ if (isMainWindow) {
   background-color: color-mix(in oklab, var(--color-surface) 70%, transparent);
   backdrop-filter: blur(20px);
 }
-:root[data-cw-on] [class*="_MainContentTopFade_"] { display: none; }
+:root[data-cw-on]:has([data-composer-placement="home"])[data-cw-sharp-home] #cw-backdrop img { filter: none; transform: none; }
+/* Fades that paint the solid surface color (above and below the conversation)
+   show hard edges over the glass, so they go while a wallpaper is on. */
+:root[data-cw-on] [class*="_MainContentTopFade_"],
+:root[data-cw-on] .pointer-events-none.bg-gradient-to-t.from-surface { display: none; }
 /* Fills behind the main panel's rounded corner; with a wallpaper it shows as an untextured strip. */
 :root[data-cw-on] aside.app-shell-left-panel::after { display: none; }
 
@@ -86,6 +96,9 @@ if (isMainWindow) {
 #cw-panel .cw-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.55; }
 #cw-panel .cw-setting { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 8px; }
 #cw-panel .cw-body > * { flex-shrink: 0; }
+#cw-panel .cw-value { opacity: 0.55; font-variant-numeric: tabular-nums; }
+#cw-panel .cw-check { display: flex; align-items: center; gap: 6px; }
+#cw-panel .cw-check input { margin: 0; accent-color: #34c759; }
 #cw-panel input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; margin: 8px 0;
   border-radius: 2px; background: color-mix(in oklab, currentColor 22%, transparent); }
 #cw-panel input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px;
@@ -141,6 +154,8 @@ if (isMainWindow) {
     const root = document.documentElement
     root.style.setProperty('--cw-dim', String(settings.dim))
     root.style.setProperty('--cw-frost', String(settings.frost))
+    root.style.setProperty('--cw-blur', String(settings.blur))
+    root.toggleAttribute('data-cw-sharp-home', settings.sharpHome)
     const image = settings.enabled ? settings.image : null
     if (!image) {
       delete root.dataset.cwOn
@@ -336,6 +351,33 @@ if (isMainWindow) {
           'select',
           { name: 'shuffle', onchange: (event) => act(() => invoke('set', { shuffleMinutes: Number(event.target.value) })) },
           SHUFFLES.map(([value, label]) => h('option', { value, selected: value === settings.shuffleMinutes }, label)),
+        ),
+      ),
+      h(
+        'label',
+        { class: 'cw-setting' },
+        h('span', {}, 'Blur ', h('span', { class: 'cw-value' }, settings.blur ? `${settings.blur}px` : 'off')),
+        h('input', {
+          type: 'range', name: 'blur', min: 0, max: 48, step: 2, value: settings.blur,
+          oninput: (event) => {
+            document.documentElement.style.setProperty('--cw-blur', event.target.value)
+            event.target.previousElementSibling.lastChild.textContent = Number(event.target.value) ? `${event.target.value}px` : 'off'
+          },
+          onchange: (event) => act(() => invoke('set', { blur: Number(event.target.value) })),
+        }),
+      ),
+      h(
+        'label',
+        { class: 'cw-setting' },
+        'Home screen',
+        h(
+          'span',
+          { class: 'cw-check' },
+          h('input', {
+            type: 'checkbox', name: 'sharpHome', checked: settings.sharpHome,
+            onchange: (event) => act(() => invoke('set', { sharpHome: event.target.checked })),
+          }),
+          'Sharp, no blur',
         ),
       ),
       h(
